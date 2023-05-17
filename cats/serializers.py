@@ -1,20 +1,9 @@
 from rest_framework import serializers
 
 import datetime as dt
-import webcolors
+from djoser.serializers import UserSerializer
 
 from .models import Cat, Owner, Achievement, AchievementCat, CHOICES
-
-
-class Hex2NameColor(serializers.Field):
-    def to_representation(self, value):
-        return value
-    def to_internal_value(self, data):
-        try:
-            data = webcolors.hex_to_name(data)
-        except ValueError:
-            raise serializers.ValidationError('Для этого цвета нет имени')
-        return data
 
 
 class AchievementSerializer(serializers.ModelSerializer):
@@ -67,3 +56,8 @@ class OwnerSerializer(serializers.ModelSerializer):
         model = Owner
         fields = ('first_name', 'last_name', 'cats')
 
+
+class CustomUserSerializer(UserSerializer):
+    class Meta:
+        model = Owner
+        fields = ('email', 'id', 'username', 'first_name', 'last_name')
